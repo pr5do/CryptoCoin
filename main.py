@@ -139,12 +139,15 @@ def main():
 			print()
 			print("You choosed to mine a block.")
 			print()
-			print("-" * 15, "MINING BLOCK...", "-" * 15)
+			print('Mining block...')
 			attr = vars(blockchain.chain[-1])
 			prev_hash = attr['hash']
-
+			print()
 			blockchain.construct_block(prev_hash)
-			print("-" * 15, "BLOCK MINED!", "-" * 15)
+			print("Block mined and added to the blockchain successfully!")
+			print()
+			time.sleep(1)
+			print("-" * 30)
 
 		if choice == 3:
 			break
