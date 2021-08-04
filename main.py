@@ -3,16 +3,17 @@ from Crypto.PublicKey import RSA
 import Crypto
 from Crypto.Hash import SHA256
 from Crypto.Signature import *
-import datatime
-from hashlib import sha512
+import datetime
+import time
+from hashlib import sha256
 import getpass
 
+
 def generate_public_and_private_key():
-	random_gen = Crypto.Random.new().read
-	private_key = RSA.generate(1024, random_gen)
-	public_key = private_key.public_key
-	return {['private_key']: binascii.hexlify(private_key.exportKey(format='DER')).decode('ascii'),
-	['public_key']: binascii.hexlify(public_key.exportKey(format='DER')).decode('ascii')
+	private_key = RSA.generate(1024)
+	public_key = private_key.publickey()
+	return {'private_key': binascii.hexlify(private_key.exportKey(format='DER')).decode('ascii'),
+	'public_key': binascii.hexlify(public_key.exportKey(format='DER')).decode('ascii')
 	}
 class Blockchain():
 	def __init__(self):
@@ -43,12 +44,12 @@ class Block():
 		nonce = 0
 		while True:
 			block_string = "{}{}{}{}".format(self.index, self.prev_hash, self.data, str(nonce))
-			block_string_hashed = sha512(block_string.encode('ascii')).hexdigest()
+			block_string_hashed = sha256(block_string.encode('ascii')).hexdigest()
 			if block_string_hashed.startswith("0" * 5):
 				proof_of_work = block_string_hashed
 				self.nonce = nonce
 				self.hash = proof_of_work
-				self.timestamp = datetime.datetime.now()
+				self.timestamp = str(datetime.datetime.now())
 				return proof_of_work
 			nonce += 1
 
@@ -67,7 +68,7 @@ class Transaction():
 		
 		private_key = RSA.importKey(binascii.unhexlify(self.sender_private_key))
 		signer = PKCS1_v1_5.new(private_key)
-		h = SHA512.new(str(public_transaction)).encode('utf8')
+		h = SHA256.new(str(public_transaction).encode('utf8'))
 		signature = binascii.hexlify(signer.sign(h)).decode('ascii')
 		public_transaction['signature'] = signature
 		return public_transaction
@@ -102,40 +103,58 @@ def main():
 			time.sleep(1)
 			while True: 
 				print()
-				answer = getpass.getpass('Type: ').replace(" ", "").lower()
+				answer = getpass.getpass('Type: ').replace(" ", "").lower()[0]
 				if answer == "y" or answer == "n":
 					break  
 				else:
 					print("Invalid value! Answer only \"y\" or \"n\"!")
-			if answer == "y":
-				print()
-				sender_private_key = getpass.getpass("Type your private key: ").replace(" ", "").encode()
-				print()
-				sender_public_key = getpass.getpass("Type your public key: ").replace(" ", "").encode()
-				print()
-				recipient_public_key = getpass.getpass("Type the public key of the person you want to transact: ").replace(" ", "").encode()
-				print()
+			while True:
+				if answer == "y":
+					print()
+					sender_private_key = input("Type your private key: ").replace(" ", "")
+					time.sleep(1)
+					sender_public_key = input("Type your public key: ").replace(" ", "")
+					time.sleep(1)
+					recipient_public_key = input("Type the public key of the person you want to transact: ").replace(" ", "").encode()
+					time.sleep(1)
+					value = int(input("Type the value of the transaction: "))
+					transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, value)
+					public_transaction = transaction.sign_transaction()
+					blockchain.add_transaction(public_transaction)
+					time.sleep(1)
+					print('Trasaction successfully registered!')
+					print("-" * 30)
+					break
+				if answer == "n":
+					print()
+					pair_of_keys = generate_public_and_private_key()
+					time.sleep(1)
+					print(f"Your public key: {pair_of_keys['public_key']}")
+					time.sleep(1)
+					print()
+					print(f"Your private key: {pair_of_keys['private_key']}")
+					time.sleep(1)
+					answer = "y"
+		if choice == 2:
+			print()
+			print("You choosed to mine a block.")
+			print()
+			print("-" * 15, "MINING BLOCK...", "-" * 15)
+			attr = vars(blockchain.chain[-1])
+			prev_hash = attr['hash']
 
-				value = int(input("Type the value of the transaction: "))
-				print()
-				transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, value)
-				public_transaction = transaction.sign_transaction()
-				blockchain.add_transaction(public_transaction)
-				time.sleep(1)
-				print('Trasaction successfully registered!')
+			blockchain.construct_block(prev_hash)
+			print("-" * 15, "BLOCK MINED!", "-" * 15)
+
+		if choice == 3:
+			break
 
 if __name__ == '__main__':
-	sender_pair_of_keys = generate_public_and_private_key()
 	recipient_pair_of_keys = generate_public_and_private_key()
-
-	sender_public_key = sender_pair_of_keys['public_key']
-	sender_private_key = sender_pair_of_keys['private_key']
 
 	recipient_public_key = recipient_pair_of_keys['public_key']
 
-	print(f"Sender public key: {sender_public_key}")
-	print(f'Sender private key: {sender_private_key}')
 	print(f'Recipient public key: {recipient_public_key}')
 	
-	#main()
+	main()
 		
