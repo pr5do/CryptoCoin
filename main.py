@@ -7,8 +7,6 @@ def generate_public_and_private_key():
 	'public_key' : public_key
 	}
 
-<<<<<<< Updated upstream
-=======
 class Block():
 	def __init__(self, data,  index, prev_hash):
 		self.data = data
@@ -28,7 +26,6 @@ class Block():
 				self.timestamp = time.time()
 				return proof_of_work
 			nonce += 1
->>>>>>> Stashed changes
 
 class Transaction():
 	def __init__(self, sender_public_key, recipient_public_key, sender_private_key, value):
@@ -56,9 +53,4 @@ if __name__ == '__main__':
 
 	recipient_public_key = recipient_pair_of_keys['public_key'
 	zero = Transaction(sender_public_key, recipient_public_key, sender_private_key, 10)
-<<<<<<< Updated upstream
 	print(zero.sign_transaction())
-=======
-	bloco = Block(zero, 0, sha256(("0" * 64).encode('ascii')).hexdigest())
-	
->>>>>>> Stashed changes
