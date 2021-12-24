@@ -41,6 +41,9 @@ class Block():
 		self.prev_hash = prev_hash
 		self.mining()
 	def mining(self):
+		def generator():
+			while True:
+				yield
 		nonce = 0
 		while True:
 			block_string = "{}{}{}{}".format(self.index, self.prev_hash, self.data, str(nonce))
@@ -93,7 +96,7 @@ def main():
 				break
 			else:
 				print()
-				print("Invalid value! Answer only 1 or 2!")
+				print("Invalid value! Answer only 1, 2 or 3!")
 		if choice == 1:
 			print()
 			print("You choosed to add a new transaction.")
@@ -160,4 +163,4 @@ if __name__ == '__main__':
 	print(f'Recipient public key: {recipient_public_key}')
 	
 	main()
-		
+	
