@@ -75,6 +75,7 @@ class Transaction():
 		signature = binascii.hexlify(signer.sign(h)).decode('ascii')
 		public_transaction['signature'] = signature
 		return public_transaction
+
 def main():
 	blockchain = Blockchain()
 	print('-' * 30 + ' Welcome to the Cryptocoin! ' + "-" * 30)
@@ -156,11 +157,11 @@ def main():
 			break
 
 if __name__ == '__main__':
-	recipient_pair_of_keys = generate_public_and_private_key()
+	#recipient_pair_of_keys = generate_public_and_private_key()
 
-	recipient_public_key = recipient_pair_of_keys['public_key']
+	#recipient_public_key = recipient_pair_of_keys['public_key']
 
-	print(f'Recipient public key: {recipient_public_key}')
+	#print(f'Recipient public key: {recipient_public_key}')
 	
 	main()
 	
