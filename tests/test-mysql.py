@@ -1,4 +1,4 @@
-from sys import exit
+'''from sys import exit
 from os import name, system
 
 users = {}
@@ -43,4 +43,12 @@ while True:
     elif status == 'q':
         exit()
     else:
-        continue
+        continue'''
+
+import mysql.connector
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="4kD1F,MjK-)ZScYTa4En@4EO5[&piX}w1_jv"
+)
+print(mydb)
