@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a application intended for me to learn how a cryptocurrency works under the hood. For this, I used the Python programmming language along with MySQL to create a login system for register users. 
+This is a application intended for me to learn how a cryptocurrency works under the hood. For this, I used the Python programmming language along with MySQL to create a login system for register users and make transaction between them. 
 
 ## Required Libraries
 
@@ -18,6 +18,8 @@ This is a application intended for me to learn how a cryptocurrency works under 
 
 ### Step 1: Clone the Project
 - `git clone https://github.com/pr5do/cryptocoin.git`
+
+### Step 2: Run the main.py file in the folder source/view
 
 
 
