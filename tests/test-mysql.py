@@ -1,15 +1,8 @@
-import mysql.connector
+from database_manager import store_user
+import getpass
 
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="4kD1F,MjK-)ZScYTa4En@4EO5[&piX}w1_jv",
-    database="cryptocoin"
-)
+user = input("Provide your username: ").replace(" ", "")
 
-mycursor = db.cursor()
+passwd = getpass.getpass("Provide your password: ").replace(" ", "")
 
-mycursor.execute('desc login')
-
-for x in mycursor:
-    print(x)
+store_user(user, passwd)
