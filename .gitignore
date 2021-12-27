@@ -114,5 +114,4 @@ dmypy.json
 .pyre/
 
 # Tests
-./tests
-./tests/database_manager.py
+tests/
