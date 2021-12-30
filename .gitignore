@@ -113,5 +113,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Tests
+# Automated tests
 tests/
+pyproject.toml
+setup.cfg
+setup.py

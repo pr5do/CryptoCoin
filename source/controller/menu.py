@@ -2,10 +2,12 @@ import getpass
 import time
 from model.blockchain import Blockchain, Transaction, generate_public_and_private_key
 
-def login():
-	return 
 
-def main():
+def login():
+	return
+
+
+def app():
 	blockchain = Blockchain()
 	print('-' * 30 + ' Welcome to the Cryptocoin! ' + "-" * 30)
 	while True:
@@ -22,7 +24,7 @@ def main():
 		while True:
 			print()
 			choice = int(getpass.getpass('Type: '))
-			if choice <=3 and choice > 0:
+			if choice <= 3 and choice > 0:
 				break
 			else:
 				print()
@@ -34,11 +36,11 @@ def main():
 			time.sleep(1)
 			print("Do you have a pair of keys? Answer \"y\" or \"n\"")
 			time.sleep(1)
-			while True: 
+			while True:
 				print()
 				answer = getpass.getpass('Type: ').replace(" ", "").lower()[0]
 				if answer == "y" or answer == "n":
-					break  
+					break
 				else:
 					print("Invalid value! Answer only \"y\" or \"n\"!")
 			while True:
@@ -46,15 +48,21 @@ def main():
 					print()
 					sender_private_key = input("Type your private key: ").replace(" ", "")
 					time.sleep(1)
+
 					sender_public_key = input("Type your public key: ").replace(" ", "")
 					time.sleep(1)
+
 					recipient_public_key = input("Type the public key of the person you want to transact: ").replace(" ", "").encode()
 					time.sleep(1)
+
 					value = int(input("Type the value of the transaction: "))
+
 					transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, value)
+
 					public_transaction = transaction.sign_transaction()
+
 					blockchain.add_transaction(public_transaction)
-					time.sleep(1)
+					time.sleep(1)				
 					print('Trasaction successfully registered!')
 					print("-" * 30)
 					break
