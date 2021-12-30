@@ -114,6 +114,5 @@ dmypy.json
 .pyre/
 
 # Automated tests
-tests/
 setup.cfg
 setup.py
