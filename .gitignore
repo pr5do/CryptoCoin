@@ -115,6 +115,5 @@ dmypy.json
 
 # Automated tests
 tests/
-pyproject.toml
 setup.cfg
 setup.py
