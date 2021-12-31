@@ -1,4 +1,4 @@
-from database_manager import store_user, find_user, connect
+'''from database_manager import store_user, find_user, connect
 import getpass
 
 
@@ -39,6 +39,4 @@ def main():
       break
 
     return True
-
-if __name__ == '__main__':
-  main()
+'''

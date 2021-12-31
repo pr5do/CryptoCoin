@@ -114,9 +114,3 @@ class Transaction():
 		public_transaction['signature'] = str(signature)
 
 		return public_transaction
-
-
-if __name__ == '__main__':
-	private_key, public_key = generate_public_and_private_key()
-
-	private_key2, public_key2 = generate_public_and_private_key()

@@ -1,17 +1,19 @@
 import mysql.connector
+from termcolor import colored
 
 
 def connect():
   try:
     connection = mysql.connector.connect(
     host="localhost",
-    user="cryptocoin",
-    passwd="wkTeDI[mB[PmmH_-bRIcw<4ai}k6)yfrxel<",
+    user="cryptocoin_viewer",
+    passwd="pRsxCjiqu}Laq(wF[y46_>v]ugTq1[TjEiUy",
     database="cryptocoin"
     )
     return connection
   except (Exception, mysql.connector.Error) as error:
-    print(error)
+    return error
+
 
 def store_user(user, passwd):
   try:
@@ -21,10 +23,10 @@ def store_user(user, passwd):
     record_to_insert = (user, passwd)
     cursor.execute(query, record_to_insert)
     connection.commit()
+    return True
   except (Exception, mysql.connector.Error) as error:
-    print(error)
-    print(f"There is already a user called {user}")
     return error
+
 
 def find_user(user, passwd):
   try:
@@ -36,5 +38,4 @@ def find_user(user, passwd):
     response = cursor.fetchone()
     return response
   except (Exception, mysql.connector.Error) as error:
-    print(error)
-
+    return error
