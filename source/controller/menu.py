@@ -11,7 +11,6 @@ from termcolor import colored
 
 
 def login():
-	print('-' * 30 + ' Welcome to the Cryptocoin! ' + "-" * 30)
 	time.sleep(1)
 	while True:
 		print()
@@ -45,32 +44,36 @@ def login():
 				if result == True:
 					print(colored('Your username and password was successfully stored! ', 'green'))
 					print()
-					return True
+					return True, username
 				if str(result) == f'1062 (23000): Duplicate entry \'{username}\' for key \'login.user\'':
 					print(colored(f'There is already a user called {username}', 'red'))
 		if choice == 2:
-			print()
-			time.sleep(1)
-			username = input('Provide your username: ').replace(" ", "")
-			print()
-			time.sleep(1)
-			passwd = getpass.getpass('Provide your password: ').replace(" ", "")
-			print()
-			time.sleep(1)
-			result = find_user(username, passwd)
-			if result == None: 
-				print(colored('Username or password wrong! ', 'red'))
-				return False
-			elif result[0] == username and passwd == result[1]:
-				print(colored("Sucessfully logged! ", "green"))
-				return True
+			while True:
+				print()
+				time.sleep(1)
+				username = input('Provide your username: ').replace(" ", "")
+				print()
+				time.sleep(1)
+				passwd = getpass.getpass('Provide your password: ').replace(" ", "")
+				print()
+				time.sleep(1)
+				result = find_user(username, passwd)
+				if str(result) == '\'NoneType\' object is not subscriptable': 
+					text = f'The user {username} doesn\'t exist! Try again!'
+					print(colored(text, 'red'))
+				else:
+					print(colored("Sucessfully logged! ", "green"))
+					return True, username
 
 
 def app():
-	if login() == True:
-		crypto_blockchain = Blockchain()
-		print('-' * 30 + ' Welcome to the Cryptocoin! ' + "-" * 30)
+	status, username = login()
+	if status == True:
+		blockchain = Blockchain()
+		print()
+		print('-' * 30 + f' Welcome to the Cryptocoin, {username}! ' + "-" * 30)
 		while True:
+			print()
 			time.sleep(1)
 			print('Choose between the options below')
 			time.sleep(1)
@@ -121,6 +124,9 @@ def app():
 
 						public_transaction = transaction.sign_transaction()
 
+						# Deleting the private key from the transaction for security purposes
+						delattr(transaction, 'sender_private_key')
+
 						Blockchain.add_transaction(public_transaction)
 						time.sleep(1)				
 						print('Trasaction successfully registered!')
@@ -141,10 +147,10 @@ def app():
 				print("You choosed to mine a block.")
 				print()
 				print('Mining block...')
-				attr = vars(crypto_blockchain.chain[-1])
+				attr = vars(blockchain.chain[-1])
 				prev_hash = attr['hash']
 				print()
-				crypto_blockchain.construct_block(prev_hash)
+				blockchain.construct_block(prev_hash)
 				print("Block mined and added to the successfully!")
 				print()
 				time.sleep(1)
@@ -157,4 +163,4 @@ def app():
 			return False
 
 if __name__ == '__main__':
-	login()
+	app()
