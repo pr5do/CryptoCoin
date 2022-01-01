@@ -1,12 +1,11 @@
 import mysql.connector
-from termcolor import colored
-
+from time import time
 
 def connect():
   try:
     connection = mysql.connector.connect(
     host="localhost",
-    user="cryptocoin_viewer",
+    user="cryptocoin-viewer",
     passwd="pRsxCjiqu}Laq(wF[y46_>v]ugTq1[TjEiUy",
     database="cryptocoin"
     )
@@ -18,11 +17,13 @@ def connect():
 def store_user(user, passwd):
   try:
     connection = connect()
-    cursor = connection.cursor()
+    cursor = connection.cursor(buffered=True)
     query = 'insert into login (user, passwd) values (%s, %s)'
-    record_to_insert = (user, passwd)
+    record_to_insert = [user, passwd]
     cursor.execute(query, record_to_insert)
     connection.commit()
+    cursor.close()
+    connection.close()
     return True
   except (Exception, mysql.connector.Error) as error:
     return error
@@ -33,9 +34,11 @@ def find_user(user, passwd):
     connection = connect()
     cursor = connection.cursor()
     query = 'select * from login where user = %s and passwd = %s'
-    record_to_insert = (user, passwd)
+    record_to_insert = [user, passwd]
     cursor.execute(query, record_to_insert)
     response = cursor.fetchone()
-    return response
+    cursor.close()
+    connection.close()
+    return (response[1], response[2])
   except (Exception, mysql.connector.Error) as error:
     return error

@@ -1,5 +1,9 @@
-from source.model.blockchain import generate_public_and_private_key, random_string_generator
-from source.model.blockchain import Transaction, Blockchain, Block
+# Process needed to run the files on the /model folder
+import sys
+sys.path.insert(1, "C:/Users/gusta/OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
+
+from blockchain import generate_public_and_private_key, verify_transaction
+from blockchain import Transaction, Blockchain, Block
 
 
 def test_generate_public_and_private_key():
@@ -7,21 +11,15 @@ def test_generate_public_and_private_key():
   private_key, public_key = generate_public_and_private_key()
   private_key2, public_key2 = generate_public_and_private_key()
 
+  print(f"Public Key Exported: {public_key.export_key(format='PEM')}")
+  print(f"Private Key Exported: {private_key.export_key(format='PEM')}")
+
   assert public_key != public_key2
   assert private_key != private_key2
 
-  assert public_key.exportKey('PEM') != public_key2.exportKey('PEM')
-  assert private_key.exportKey('PEM') != private_key2.exportKey('PEM')
+  assert public_key.export_key(format='PEM') != public_key2.export_key(format='PEM')
+  assert private_key.export_key(format='PEM') != private_key2.export_key(format='PEM')
 
-  assert public_key.exportKey('PEM').decode('utf-8') != public_key2.exportKey('PEM').decode('utf-8')
-  assert private_key.exportKey('PEM').decode('utf-8') != private_key2.exportKey('PEM').decode('utf-8')
-
-def test_random_string_generator():
-
-  password = random_string_generator()
-  password2 = random_string_generator()
-
-  assert password != password2 
 
 # Transaction class testing
 
@@ -76,9 +74,12 @@ def test_construct_block():
 
   assert blockchain.chain == [genesis, block]
 
-def construct_genesis():
-  blockchain = Blockchain()
+def test_verify_transaction():
+  sender_private, sender_public = generate_public_and_private_key()
+  recipient_private, recipient_public = generate_public_and_private_key()
 
-  genesis = vars(blockchain)['chain'][0]
+  transaction = Transaction(sender_public, recipient_public, sender_private, 11)
 
-  assert blockchain.construct_genesis == True, genesis
+  public_transaction = transaction.sign_transaction()
+
+  assert verify_transaction(public_transaction) == True

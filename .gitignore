@@ -116,3 +116,9 @@ dmypy.json
 # Automated tests
 setup.cfg
 setup.py
+
+# VS Code
+.vscode
+
+# Random Master
+VEJA.txt

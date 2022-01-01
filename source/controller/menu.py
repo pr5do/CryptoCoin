@@ -3,7 +3,7 @@ import time
 
 # Process needed to run the files on the /model folder
 import sys
-sys.path.append("C:\\Users\\gusta\OneDrive\\Software\\Meus-Projetos\\CryptoCoin\\source\\model")
+sys.path.insert(1, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
 
 from blockchain import Blockchain, Transaction, generate_public_and_private_key
 from database_manager import store_user, find_user
