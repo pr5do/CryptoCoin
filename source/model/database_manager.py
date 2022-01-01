@@ -1,5 +1,5 @@
 import mysql.connector
-from time import time
+
 
 def connect():
   try:
@@ -26,15 +26,16 @@ def store_user(user, passwd):
     connection.close()
     return True
   except (Exception, mysql.connector.Error) as error:
+    print(error)
     return error
 
 
-def find_user(user, passwd):
+def find_user(user):
   try:
     connection = connect()
     cursor = connection.cursor()
-    query = 'select * from login where user = %s and passwd = %s'
-    record_to_insert = [user, passwd]
+    query = 'select * from login where user = %s'
+    record_to_insert = [user]
     cursor.execute(query, record_to_insert)
     response = cursor.fetchone()
     cursor.close()

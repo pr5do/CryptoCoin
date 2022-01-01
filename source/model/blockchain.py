@@ -4,8 +4,6 @@ from Crypto.Signature import DSS
 from Crypto.Hash import SHA256
 import datetime
 from hashlib import sha256
-import secrets
-import string
 
 
 def generate_public_and_private_key():
