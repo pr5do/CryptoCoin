@@ -114,7 +114,6 @@ dmypy.json
 .pyre/
 
 # Automated tests
-setup.cfg
 setup.py
 
 # VS Code

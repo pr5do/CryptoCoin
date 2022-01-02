@@ -1,6 +1,6 @@
 # Process needed to run the files on the /model folder
 import sys
-sys.path.insert(1, "C:/Users/gusta/OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
+sys.path.insert(0, "C:/Users/gusta/OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
 
 from database_manager import connect, store_user, find_user, delete_user
 
