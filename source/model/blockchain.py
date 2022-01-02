@@ -136,3 +136,9 @@ if __name__ == '__main__':
     print(f"Public Transaction: {public_transaction}")
     print("*" * 30)
     print(f"Signature: {verify_transaction(public_transaction)[1]}")
+
+    blockchain = Blockchain()
+
+    blockchain.add_transaction(public_transaction)
+
+

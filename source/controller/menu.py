@@ -6,7 +6,6 @@ from blockchain import Blockchain, Transaction, generate_private_and_public_key
 from database_manager import change_public_and_private_key_status, store_public_key, store_user, find_user, get_public_and_private_key_status
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
-from Crypto.PublicKey import ECC
 
 from termcolor import colored
 import getpass
@@ -151,6 +150,8 @@ def app():
 								else:
 										print()
 										print(colored("Invalid value! Answer only 1, 2 or 3!", "red"))
+						# This is temporily commented because, for now, doesn't work, and I need to take a break
+						'''
 						if choice == 1:
 								print()
 								print("You choosed to add a new transaction.")
@@ -201,6 +202,7 @@ def app():
 												print(f"Your private key: {private_key.export_key(format='PEM')}")
 												time.sleep(1)
 												answer = "y"
+											'''
 						if choice == 2:
 								print()
 								print("You choosed to mine a block.")
