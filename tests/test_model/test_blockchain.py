@@ -2,14 +2,14 @@
 import sys
 sys.path.insert(1, "C:/Users/gusta/OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
 
-from blockchain import generate_public_and_private_key, verify_transaction
+from blockchain import generate_private_and_public_key, verify_transaction
 from blockchain import Transaction, Blockchain, Block
 
 
-def test_generate_public_and_private_key():
+def test_generate_private_and_public_key():
    
-  private_key, public_key = generate_public_and_private_key()
-  private_key2, public_key2 = generate_public_and_private_key()
+  private_key, public_key = generate_private_and_public_key()
+  private_key2, public_key2 = generate_private_and_public_key()
 
   print(f"Public Key Exported: {public_key.export_key(format='PEM')}")
   print(f"Private Key Exported: {private_key.export_key(format='PEM')}")
@@ -25,8 +25,8 @@ def test_generate_public_and_private_key():
 
 def test_sign_transaction():
 
-  sender_private_key, sender_public_key = generate_public_and_private_key()
-  recipient_private_key, recipient_public_key = generate_public_and_private_key()
+  sender_private_key, sender_public_key = generate_private_and_public_key()
+  recipient_private_key, recipient_public_key = generate_private_and_public_key()
 
   transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, 42)
 
@@ -75,11 +75,11 @@ def test_construct_block():
   assert blockchain.chain == [genesis, block]
 
 def test_verify_transaction():
-  sender_private, sender_public = generate_public_and_private_key()
-  recipient_private, recipient_public = generate_public_and_private_key()
+  sender_private, sender_public = generate_private_and_public_key()
+  recipient_private, recipient_public = generate_private_and_public_key()
 
   transaction = Transaction(sender_public, recipient_public, sender_private, 11)
 
   public_transaction = transaction.sign_transaction()
 
-  assert verify_transaction(public_transaction) == True
+  assert verify_transaction(public_transaction)[0] == True

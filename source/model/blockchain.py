@@ -1,13 +1,12 @@
-import binascii
 from Crypto.PublicKey import ECC
 from Crypto.Signature import DSS
-from Crypto.Hash import SHA256
+from Crypto.Hash import SHA384
 import datetime
 from hashlib import sha256
 
 
-def generate_public_and_private_key():
-    key = ECC.generate(curve='secp256r1')
+def generate_private_and_public_key():
+    key = ECC.generate(curve='secp384r1')
     private_key, public_key = key, key.public_key()
 
     return (private_key, public_key)
@@ -19,17 +18,17 @@ def verify_transaction(public_transaction):
     public_transaction_without_signature_and_hash = {
         'sender_public_key': public_transaction['sender_public_key'],
         'recipient_public_key': public_transaction['recipient_public_key'],
-        'value': public_transaction['value'],
+        'value': public_transaction['value']
     }
 
-    hash_object = SHA256.new(str(public_transaction_without_signature_and_hash).encode('utf8'))
+    hash_object = SHA384.new(str(public_transaction_without_signature_and_hash).encode('utf8'))
 
     try:
         DSS.new(public_key, 'fips-186-3').verify(hash_object, public_transaction['signature'])
-        return True
+        return True, "This transaction is valid"
 
     except (ValueError):
-        return False
+        return False, "This transaction is not valid"
 
 
 class Blockchain():
@@ -109,7 +108,7 @@ class Transaction():
         private_key = self.sender_private_key
         signer = DSS.new(private_key, 'fips-186-3')
 
-        hash_object = SHA256.new(str(public_transaction).encode('utf8'))
+        hash_object = SHA384.new(str(public_transaction).encode('utf8'))
 
         signature = signer.sign(hash_object)
 
@@ -128,12 +127,12 @@ class Transaction():
 
 
 if __name__ == '__main__':
-    sender_private_key, sender_public_key = generate_public_and_private_key()
-    recipient_private_key, recipient_public_key = generate_public_and_private_key()
+    sender_private_key, sender_public_key = generate_private_and_public_key()
+    recipient_private_key, recipient_public_key = generate_private_and_public_key()
 
     transaction = Transaction(sender_private_key, recipient_public_key, sender_private_key, 11)
     public_transaction = transaction.sign_transaction()
 
-    print(f"Public Transaction: {public_transaction['timestamp']}")
+    print(f"Public Transaction: {public_transaction}")
     print("*" * 30)
     print(f"Signature: {verify_transaction(public_transaction)[1]}")
