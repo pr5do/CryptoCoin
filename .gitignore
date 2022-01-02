@@ -120,5 +120,5 @@ setup.py
 # VS Code
 .vscode
 
-# Random Master
-VEJA.txt
+# Random Reminders
+test_private_keys.txt
