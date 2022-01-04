@@ -20,8 +20,8 @@ def test_generate_private_and_public_key():
   assert public_key.export_key(format='PEM') != public_key2.export_key(format='PEM')
   assert private_key.export_key(format='PEM') != private_key2.export_key(format='PEM')
 
+  assert public_key.export_key(format='OpenSSH') != public_key2.export_key(format='OpenSSH')
 
-# Transaction class testing
 
 def test_sign_transaction():
 
@@ -32,7 +32,6 @@ def test_sign_transaction():
 
   assert transaction.sign_transaction() != transaction.sign_transaction()
 
-# Block class testing
 
 def test_mining():
 
@@ -50,7 +49,6 @@ def test_mining():
 
   assert block.mining() != block2.mining()
 
-# Blockchain class testing
 
 def test_add_transaction():
   blockchain = Blockchain()
