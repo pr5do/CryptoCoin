@@ -9,7 +9,7 @@ from termcolor import colored
 from database_manager import store_user, find_user
 from argon2.exceptions import VerifyMismatchError
 import os
-
+from typing import Literal, Type
 
 def login():
     os.system('cls||clear')
@@ -86,9 +86,6 @@ def login():
                     verify = ph.verify(result[1], passwd)
                 except (VerifyMismatchError):
                     print(colored("Your password isn\'t correct!", "red"))
-                except (TypeError):
-                    verify = False
-
                 try:
                     if verify == True:
                         print(colored("Sucessfully logged! ", "green"))
@@ -96,3 +93,5 @@ def login():
                         return True, username
                 except (UnboundLocalError):
                     pass
+if __name__ == '__main__':
+    login()

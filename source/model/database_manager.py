@@ -114,3 +114,16 @@ def get_public_key(user):
   except (Exception, mysql.connector.Error) as error:
     return error
 
+def get_balance(user): 
+  try:
+    connection = connect()
+    cursor = connection.cursor()
+    query = 'select balance from users where user = %s'
+    record_to_insert = [user]
+    cursor.execute(query, record_to_insert)
+    response = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return response[0]
+  except (Exception, mysql.connector.Error) as error:
+    return error

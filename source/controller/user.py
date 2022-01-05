@@ -3,7 +3,7 @@ import sys
 sys.path.insert(
     0, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
 
-from database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key
+from database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key, get_balance, find_user
 from blockchain import Blockchain, Transaction, generate_private_and_public_key
 import os
 import time
@@ -11,7 +11,7 @@ import getpass
 from termcolor import colored
 from Crypto.PublicKey import ECC
 from login import login
-
+from prompt_toolkit import prompt
 
 
 def generate_public_and_private_key_for_user(username):
@@ -47,31 +47,33 @@ def generate_public_and_private_key_for_user(username):
     user_private_key = user_private_key.export_key(
         format='PEM', passphrase=private_key_passphrase, protection='PBKDF2WithHMAC-SHA1AndAES128-CBC')
 
-    user_private_key = user_private_key.replace('\n', ' ').split(' ')[4:10]
+    print(colored("Copy the \"-----BEGIN ENCRYPTED PRIVATE KEY-----\" and \"-----END ENCRYPTED PRIVATE KEY-----\"", "yellow"))
 
-    user_private_key = "".join(user_private_key)
+    print()
 
     print(f"Your private key is: {user_private_key}")
     print()
     result = change_public_and_private_key_status(username, user_public_key)
 
-    confirmation = input("[PRESS ENTER TO CONTINUE]")
+    input("[PRESS ENTER TO CONTINUE]")
 
     return result
 
 
-def add_transaction_to_current_data(username):
+def add_transaction_to_current_data(username, blockchain):
     print()
     print("You choosed to add a new transaction.")
     print()
     time.sleep(1)
-    sender_private_key = getpass.getpass("Type your private key: ").replace(" ", "")
+    sentinel = ''
+    user_private_key = prompt("Type your private key (press [Meta+Enter] or [Esc] followed by [Enter] to accept the input): \n\n", multiline=True)
     time.sleep(1)
-    passphrase = input(
-        "Type the passphrase for your private key: ").replace(" ", "")
+    print()
+    passphrase = getpass.getpass("Type the passphrase for your private key: ").replace(" ", "")
+    print()
 
-    recipient_public_key = input(
-        "Type the recipient CryptoCoin address of the transaction: ").replace(" ", "")
+    recipient_public_key = input("Type the recipient CryptoCoin address of the transaction: ").replace(" ", "")
+    print()
     time.sleep(1)
 
     value = int(input("Type the value of the transaction: "))
@@ -79,23 +81,40 @@ def add_transaction_to_current_data(username):
 
     sender_public_key = get_public_key(username)
 
-    sender_public_key = ECC.import_key(
-        sender_public_key, curve_name='NIST P-384')
-    sender_private_key = ECC.import_key(
-        sender_private_key, passphrase=passphrase, curve_name='NIST P-384')
+    sender_public_key = ECC.import_key(sender_public_key)
+    sender_private_key = ECC.import_key(user_private_key, passphrase=passphrase)
 
-    transaction = Transaction(
-        sender_public_key, recipient_public_key, sender_private_key, value)
+    transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, value)
 
     public_transaction = transaction.sign_transaction()
 
     # Deleting the private key from the transaction for security purposes
     delattr(transaction, 'sender_private_key')
 
-    Blockchain.add_transaction(public_transaction)
+    blockchain.add_transaction(public_transaction)
     time.sleep(1)
-    print(colored('Trasaction successfully registered!', 'green'))
 
+    print()
+    print(colored('Transaction successfully registered!', 'green'))
+
+    os.system('cls||clear')
+
+    return True
+
+def view_wallet(username):
+    print()
+    print("You choosed to see your wallet")
+    print()
+    time.sleep(1)
+    print(f"Your currently have {float(get_balance(username))} CRCs")
+    print()
+    time.sleep(1)
+    print(f"Your public key is {get_public_key(username)}")
+    time.sleep(1)
+    print()
+    input("[PRESS ENTER TO CONTINUE]")
+    if get_public_key(username) == None:
+        return False
     return True
 
 
@@ -110,19 +129,18 @@ def app():
             '-' * 30 + f' Welcome to the Cryptocoin, {username}! ' + "-" * 30)
         while True:
             if get_public_and_private_key_status(username) == 0:
-                public_and_private_key_status = generate_public_and_private_key_for_user(
-                    username)
+                generate_public_and_private_key_for_user(username)
                 os.system('cls||clear')
-            elif get_public_and_private_key_status(username) == 1 and public_and_private_key_status[0] == True:
+            elif get_public_and_private_key_status(username) == 1:
                 while True:
                     print()
                     time.sleep(1)
                     print('Choose between the options below:')
                     time.sleep(1)
                     print()
-                    print('[1]: Add a new transaction')
+                    print('[1]: Make a new transaction')
                     time.sleep(1)
-                    print('[2]: Mine a block')
+                    print('[2]: View your wallet')
                     time.sleep(1)
                     print('[3]: Quit')
                     time.sleep(1)
@@ -136,22 +154,9 @@ def app():
                             print(
                                 colored("Invalid value! Answer only 1, 2 or 3!", "red"))
                     if choice == 1:
-                        add_transaction_to_current_data(username)
-
+                        add_transaction_to_current_data(username, blockchain)
                     if choice == 2:
-                        print()
-                        print("You choosed to mine a block.")
-                        print()
-                        print('Mining block...')
-                        attr = vars(blockchain.chain[-1])
-                        prev_hash = attr['hash']
-                        print()
-                        blockchain.construct_block(prev_hash)
-                        print("Block mined and added to the successfully!")
-                        print()
-                        time.sleep(1)
-                        print("-" * 30)
-
+                        view_wallet(username)
                     if choice == 3:
                         os.system('cls||clear')
                         time.sleep(1)
@@ -166,4 +171,4 @@ def app():
 
 
 if __name__ == '__main__':
-    app()
+    view_wallet('Gustavo')
