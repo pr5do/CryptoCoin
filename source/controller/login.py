@@ -56,6 +56,7 @@ def login():
                 if result == True:
                     print(colored('Your username and password was successfully stored! ', 'green'))
                     print()
+                    time.sleep(1)
                     return True, username
                 if str(result) == f'1062 (23000): Duplicate entry \'{username}\' for key \'login.user\'':
                     print(colored(f'There is already a user called {username}', 'red'))

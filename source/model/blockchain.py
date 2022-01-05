@@ -131,6 +131,8 @@ if __name__ == '__main__':
     recipient_private_key, recipient_public_key = generate_private_and_public_key()
 
     transaction = Transaction(sender_private_key, recipient_public_key, sender_private_key, 11)
+    print(vars(transaction))
+    '''
     public_transaction = transaction.sign_transaction()
 
     print(f"Public Transaction: {public_transaction}")
@@ -140,5 +142,5 @@ if __name__ == '__main__':
     blockchain = Blockchain()
 
     blockchain.add_transaction(public_transaction)
-
+    '''
 
