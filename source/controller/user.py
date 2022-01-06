@@ -1,7 +1,7 @@
 # Process needed to run the files on the /model folder
 import sys
-sys.path.insert(
-    0, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
+
+sys.path.insert(0, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
 
 from database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key, get_balance, find_user
 from blockchain import Blockchain, Transaction, generate_private_and_public_key
