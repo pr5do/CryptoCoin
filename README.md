@@ -12,13 +12,15 @@ An application intended for me to learn how a cryptocurrency works under the hoo
 
 - `pycryptodome`
 - `mysql-connector`
+- `termcolor`
+- `prompt-toolkit`
+- `argon2`
 
 ## Installation
 
-### Step 1: Clone the Project
-- `git clone https://github.com/pr5do/cryptocoin.git`
+### Step 1: Install the dependencies: 
 
-### Step 2: Type "pip install -r requirements.txt" on our terminal
+Type "pip install -r requirements.txt" on our terminal
 
 ### Step 3: Run the source/view/main.py file
 
