@@ -127,3 +127,6 @@ def get_balance(user):
     return response[0]
   except (Exception, mysql.connector.Error) as error:
     return error
+
+if __name__ == '__main__':
+  print(connect())

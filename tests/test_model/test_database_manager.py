@@ -1,9 +1,5 @@
-# Process needed to run the files on the /model folder
-import sys
-sys.path.insert(0, "C:/Users/gusta/OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
-
-from blockchain import generate_private_and_public_key
-from database_manager import connect, store_public_key, store_user, find_user, delete_user, get_public_and_private_key_status, change_public_and_private_key_status, get_public_key, get_balance
+from source.model.blockchain import generate_private_and_public_key
+from source.model.database_manager import connect, store_public_key, store_user, find_user, delete_user, get_public_and_private_key_status, change_public_and_private_key_status, get_public_key, get_balance
 
 
 

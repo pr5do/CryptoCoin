@@ -2,3 +2,6 @@ pycryptodome==3.10.1
 mysql-connector-python-rf==2.2.2
 termcolor==1.1.0
 prompt_toolkit==3.0.24
+distro==1.6.0 
+argon2-cffi==21.3.0
+mysql-connector-python== 8.0.27 

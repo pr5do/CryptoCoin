@@ -1,17 +1,12 @@
-# Process needed to run the files on the /model folder
-import sys
-
-sys.path.insert(0, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
-
-from database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key, get_balance, find_user
-from blockchain import Blockchain, Transaction, generate_private_and_public_key
-import os
+from source.model.database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key, get_balance, find_user
+from source.model.blockchain import Blockchain, Transaction, generate_private_and_public_key
 import time
 import getpass
 from termcolor import colored
 from Crypto.PublicKey import ECC
 from login import login
 from prompt_toolkit import prompt
+import os
 
 
 def generate_public_and_private_key_for_user(username):
@@ -169,6 +164,5 @@ def app():
         print(colored("Error during login", "red"))
         return False
 
-
 if __name__ == '__main__':
-    view_wallet('Gustavo')
+    app()

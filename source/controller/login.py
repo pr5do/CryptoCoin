@@ -1,15 +1,11 @@
-# Process needed to run the files on the /model folder
-import sys
-sys.path.insert(0, "C:/Users/gusta\OneDrive/Software/Meus-Projetos/CryptoCoin/source/model")
-
 import getpass
 import time 
 from argon2 import PasswordHasher
 from termcolor import colored
-from database_manager import store_user, find_user
+from source.model.database_manager import store_user, find_user
 from argon2.exceptions import VerifyMismatchError
 import os
-from typing import Literal, Type
+
 
 def login():
     os.system('cls||clear')
