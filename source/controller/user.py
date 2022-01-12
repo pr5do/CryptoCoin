@@ -1,12 +1,39 @@
-from source.model.database_manager import change_public_and_private_key_status, store_public_key, get_public_and_private_key_status, get_public_key, get_balance, find_user
-from source.model.blockchain import Blockchain, Transaction, generate_private_and_public_key
+import os
+import sys
+import distro
+from pathlib import Path
+
+if sys.platform == 'linux' or sys.platform == 'linux2':
+    if distro.id() == 'ubuntu':
+        try:
+            #path = Path(str(os.getcwd()))
+            parent_directory = Path(__file__).absolute().parent.parent
+            parent_directory = str(parent_directory)
+            sys.path.insert(0, f"{parent_directory}/model")
+        except Exception as error:
+            print(error)
+
+if sys.platform == 'win32':
+    try:
+        parent_directory = Path(__file__).absolute().parent.parent
+        parent_directory = str(parent_directory)
+        sys.path.insert(0, f"{parent_directory}/model")
+    except Exception as error:
+        print(error)
+
+
+from database_manager import change_public_and_private_key_status,
+store_public_key, get_public_and_private_key_status, get_public_key, get_balance
+from blockchain import Blockchain, Transaction, generate_private_and_public_key
+
+from login import login
+
 import time
 import getpass
 from termcolor import colored
+
 from Crypto.PublicKey import ECC
-from login import login
 from prompt_toolkit import prompt
-import os
 
 
 def generate_public_and_private_key_for_user(username):
@@ -34,13 +61,15 @@ def generate_public_and_private_key_for_user(username):
     print()
     time.sleep(1)
 
-    print(colored("Attention! if you lose your passphrase you will not be able to make transactions in your account", "yellow"))
+    print(colored("Attention! if you lose your passphrase you will not be able
+        to make transactions in your account", "yellow"))
     print(colored("Store your private key in some safe place!", 'yellow'))
 
     print()
 
     user_private_key = user_private_key.export_key(
-        format='PEM', passphrase=private_key_passphrase, protection='PBKDF2WithHMAC-SHA1AndAES128-CBC')
+        format='PEM', passphrase=private_key_passphrase,
+        protection='PBKDF2WithHMAC-SHA1AndAES128-CBC')
 
     print(colored("Copy the \"-----BEGIN ENCRYPTED PRIVATE KEY-----\" and \"-----END ENCRYPTED PRIVATE KEY-----\"", "yellow"))
 
@@ -61,13 +90,16 @@ def add_transaction_to_current_data(username, blockchain):
     print()
     time.sleep(1)
     sentinel = ''
-    user_private_key = prompt("Type your private key (press [Meta+Enter] or [Esc] followed by [Enter] to accept the input): \n\n", multiline=True)
+    user_private_key = prompt(
+        "Type your private key (press [Meta+Enter] or [Esc] followed by [Enter] to accept the input): \n\n", multiline=True)
     time.sleep(1)
     print()
-    passphrase = getpass.getpass("Type the passphrase for your private key: ").replace(" ", "")
+    passphrase = getpass.getpass(
+        "Type the passphrase for your private key: ").replace(" ", "")
     print()
 
-    recipient_public_key = input("Type the recipient CryptoCoin address of the transaction: ").replace(" ", "")
+    recipient_public_key = input(
+        "Type the recipient CryptoCoin address of the transaction: ").replace(" ", "")
     print()
     time.sleep(1)
 
@@ -77,9 +109,11 @@ def add_transaction_to_current_data(username, blockchain):
     sender_public_key = get_public_key(username)
 
     sender_public_key = ECC.import_key(sender_public_key)
-    sender_private_key = ECC.import_key(user_private_key, passphrase=passphrase)
+    sender_private_key = ECC.import_key(
+        user_private_key, passphrase=passphrase)
 
-    transaction = Transaction(sender_public_key, recipient_public_key, sender_private_key, value)
+    transaction = Transaction(
+        sender_public_key, recipient_public_key, sender_private_key, value)
 
     public_transaction = transaction.sign_transaction()
 
@@ -91,10 +125,12 @@ def add_transaction_to_current_data(username, blockchain):
 
     print()
     print(colored('Transaction successfully registered!', 'green'))
+    time.sleep(2)
 
     os.system('cls||clear')
 
     return True
+
 
 def view_wallet(username):
     print()
@@ -163,6 +199,7 @@ def app():
     else:
         print(colored("Error during login", "red"))
         return False
+
 
 if __name__ == '__main__':
     app()

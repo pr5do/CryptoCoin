@@ -118,5 +118,7 @@ dmypy.json
 # VS Code
 .vscode/
 
+# Vim
+.vim/
 # Random Reminders
 test_private_keys.txt

@@ -1,10 +1,43 @@
-import getpass
-import time 
-from argon2 import PasswordHasher
-from termcolor import colored
-from source.model.database_manager import store_user, find_user
-from argon2.exceptions import VerifyMismatchError
 import os
+import sys
+import distro
+from pathlib import Path
+
+if sys.platform == 'linux' or sys.platform == 'linux2':
+    if distro.id() == 'ubuntu':
+        try:
+            parent_directory = Path(__file__).absolute().parent.parent
+            parent_directory = str(parent_directory)
+            sys.path.insert(0, f"{parent_directory}/model")
+        except Exception as error:
+            print(error)
+    else:
+        try:
+            parent_directory = Path(__file__).absolute().parent.parent
+            parent_directory = str(parent_directory)
+            sys.path.insert(0, f"{parent_directory}/model")
+        except Exception as error:
+            print(f"This software was not tested on your distro, only in Ubuntu. The following error ocurred{error}")
+
+if sys.platform == 'win32':
+    try:
+        parent_directory = Path(__file__).absolute().parent.parent
+        parent_directory)
+        sys.path.insert(0, f"{parent_directory}/model")
+    except Exception as error:
+        print(error)
+
+
+
+from database_manager import store_user, find_user
+
+import getpass
+import time
+from termcolor import colored
+
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
 
 
 def login():
@@ -42,7 +75,8 @@ def login():
                 username = input('Provide your username: ').replace(" ", "")
                 print()
                 time.sleep(1)
-                passwd = getpass.getpass('Provide your password: ').replace(" ", "")
+                passwd = getpass.getpass(
+                    'Provide your password: ').replace(" ", "")
                 print()
                 print("-" * 35)
                 print()
@@ -50,12 +84,14 @@ def login():
                 passwd = ph.hash(passwd)
                 result = store_user(username, passwd)
                 if result == True:
-                    print(colored('Your username and password was successfully stored! ', 'green'))
+                    print(
+                        colored('Your username and password was successfully stored! ', 'green'))
                     print()
                     time.sleep(1)
                     return True, username
                 if str(result) == f'1062 (23000): Duplicate entry \'{username}\' for key \'login.user\'':
-                    print(colored(f'There is already a user called {username}', 'red'))
+                    print(
+                        colored(f'There is already a user called {username}', 'red'))
 
         if choice == 2:
             while True:
@@ -66,7 +102,8 @@ def login():
                 username = input('Provide your username: ').replace(" ", "")
                 print()
                 time.sleep(1)
-                passwd = getpass.getpass('Provide your password: ').replace(" ", "")
+                passwd = getpass.getpass(
+                    'Provide your password: ').replace(" ", "")
                 print()
                 print("-" * 35)
                 print()
@@ -89,5 +126,7 @@ def login():
                         return True, username
                 except (UnboundLocalError):
                     pass
+
+
 if __name__ == '__main__':
     login()
