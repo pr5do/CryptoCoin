@@ -2,131 +2,199 @@ import mysql.connector
 
 
 def connect():
-  try:
-    connection = mysql.connector.connect(
-    host="localhost",
-    user="cryptocoin-viewer",
-    passwd="pRsxCjiqu}Laq(wF[y46_>v]ugTq1[TjEiUy",
-    database="cryptocoin",
-    autocommit=True
-    )
-    return connection
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+
+    Connects to the database 'cryptocoin'
+
+    """
+
+    try:
+        connection = mysql.connector.connect(
+        host="0.0.0.0",
+        user="cryptocoin-admin",
+        passwd="pRsxCjiqu}Laq(wF[y46_>v]ugTq1[TjEiUy",
+        database="cryptocoin",
+        autocommit=True
+        )
+        return connection
+    except (Exception, mysql.connector.Error) as error:
+        return error
 
 
 def store_user(user, passwd):
-  try:
-    connection = connect()
-    cursor = connection.cursor(buffered=True)
-    query = 'insert into users (user, passwd) values (%s, %s)'
-    record_to_insert = [user, passwd]
-    cursor.execute(query, record_to_insert)
-    cursor.close()
-    connection.close()
-    return True
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+        Store username and password from the user
+
+        Parameters:
+            user (str): Username inputed by the user
+            passwd (str): Password inputed by the user
+        Returns:
+            result (bool or Exception): Result of the operation. 'True', if was
+            sucessful, or an Exception if not
+    """
+
+    try:
+        connection = connect()
+        cursor = connection.cursor(buffered=True)
+        query = 'insert into users (user, passwd) values (%s, %s)'
+        record_to_insert = [user, passwd]
+        cursor.execute(query, record_to_insert)
+        cursor.close()
+        connection.close()
+        return True
+    except (Exception, mysql.connector.Error) as error:
+        return error
 
 
 def find_user(user):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'select * from users where user = %s'
-    record_to_insert = [user]
-    cursor.execute(query, record_to_insert)
-    response = cursor.fetchone()
-    cursor.close()
-    connection.close()
-    return (response[1], response[2])
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+
+    Finds user in the database
+
+    Parameters:
+        user (str): Username inputed by the user
+
+    Returns:
+        result (tuple): Tuple corresponding to the user username and password
+
+    """
+
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        connection = connect()
+        query = 'select * from users where user = %s'
+        record_to_insert = [user]
+        cursor.execute(query, record_to_insert)
+        response = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return (response[1], response[2])
+    except (Exception, mysql.connector.Error) as error:
+        return error
+
 
 def delete_user(user, passwd):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'delete from users where user = %s and passwd = %s '
-    record_to_insert = [user, passwd]
-    cursor.execute(query, record_to_insert)
-    cursor.close()
-    connection.close()
-    return True
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+
+        Delete user of the database
+
+        Parameters:
+            user (str): Username inputed by the user
+            passwd (str): Password inputed by the user
+
+        Returns:
+            result (bool or Exception): Result of the operation. 'True', if was
+            sucessful, or an Exception if not
+
+    """
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        query = 'delete from users where user = %s and passwd = %s '
+        record_to_insert = [user, passwd]
+        cursor.execute(query, record_to_insert)
+        cursor.close()
+        connection.close()
+        return True
+    except (Exception, mysql.connector.Error) as error:
+        return error
+
 
 def get_public_and_private_key_status(user):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'select has_private_and_public_key from users where user = %s'
-    record_to_insert = [user]
-    cursor.execute(query, record_to_insert)
-    response = cursor.fetchone()
-    cursor.close()
-    connection.close()
-    return response[0]
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+        Get the column 'has_private_and_public_key' of the database
+
+            Parameters:
+                user (str): Username inputed by the user
+
+            Returns:
+               response (int): 0 if the user don't have a public and private key
+               and 1 if the user already have a public and private key
+
+    """
+
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        query = 'select has_private_and_public_key from users where user = %s'
+        record_to_insert = [user]
+        cursor.execute(query, record_to_insert)
+        response = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return response[0]
+    except (Exception, mysql.connector.Error) as error:
+            return error
+
 
 def store_public_key(user, public_key):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'update users set public_key = %s where user = %s'
-    record_to_insert = [public_key, user]
-    cursor.execute(query, record_to_insert)
-    cursor.close()
-    connection.close()
-    return True
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    """
+        Store public key generated by the system and stores in the database
+
+            Parameters:
+                user (str): Username inputed by the user
+                public_key (?)
+    """
+
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        query = 'update users set public_key = %s where user = %s'
+        record_to_insert = [public_key, user]
+        cursor.execute(query, record_to_insert)
+        cursor.close()
+        connection.close()
+        return True
+    except (Exception, mysql.connector.Error) as error:
+        return error
 
 
 def change_public_and_private_key_status(user, public_key):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    if get_public_and_private_key_status(user) == 0:
-      query = "update users set has_private_and_public_key = 1 where user = %s and public_key = %s"
-      record_to_insert = [user, public_key]
-      cursor.execute(query, record_to_insert)
-      cursor.close()
-      connection.close()
-      return True, "The user now have a public and private key"
-    else:
-      return False, "The user already have a public and private key"
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        if get_public_and_private_key_status(user) == 0:
+          query = "update users set has_private_and_public_key = 1where user = %s and public_key = %s"
+          record_to_insert = [user, public_key]
+          cursor.execute(query, record_to_insert)
+          cursor.close()
+          connection.close()
+          return True, "The user now have a public and private key"
+        else:
+          return False, "The user already have a public and private key"
+    except (Exception, mysql.connector.Error) as error:
+        return error
+
 
 def get_public_key(user):
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'select (public_key) from users where user = %s'
-    record_to_insert = [user]
-    cursor.execute(query, record_to_insert)
-    response = cursor.fetchone()
-    cursor.close()
-    connection.close()
-    return response[0]
-  except (Exception, mysql.connector.Error) as error:
-    return error
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        query = 'select (public_key) from users where user = %s'
+        record_to_insert = [user]
+        cursor.execute(query, record_to_insert)
+        response = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return response[0]
+    except (Exception, mysql.connector.Error) as error:
+        return error
 
-def get_balance(user): 
-  try:
-    connection = connect()
-    cursor = connection.cursor()
-    query = 'select balance from users where user = %s'
-    record_to_insert = [user]
-    cursor.execute(query, record_to_insert)
-    response = cursor.fetchone()
-    cursor.close()
-    connection.close()
-    return response[0]
-  except (Exception, mysql.connector.Error) as error:
-    return error
+
+def get_balance(user):
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+        query = 'select balance from users where user = %s'
+        record_to_insert = [user]
+        cursor.execute(query, record_to_insert)
+        response = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return response[0]
+    except (Exception, mysql.connector.Error) as error:
+        return error
 
 if __name__ == '__main__':
-  print(connect())
+    print(connect())

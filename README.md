@@ -1,10 +1,10 @@
 # Cryptocoin
 
-![Tests](https://github.com/pr5do/cryptocoin/actions/workflows/tests.yml/badge.svg)
+![CI](https://github.com/pr5do/cryptocoin/actions/workflows/tests.yml/badge.svg)
 
-## Overview
+## Description
 
-An application intended for me to learn how a cryptocurrency works under the hood. For this, I used the Python programmming language along with MySQL to create a login system for register users and make transaction between them. 
+An application intended for me to learn how a cryptocurrency works under the hood. For this, I used the Python programmming language along with MySQL to create a login system for register users and make transaction between them.
 
 **NOTE**: This project is tested to work on python 3.8 and 3.9 versions
 

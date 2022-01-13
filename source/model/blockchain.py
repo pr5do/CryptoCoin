@@ -9,6 +9,7 @@ def generate_private_and_public_key():
     """
     Generates EccKey object public and private ECDSA key
     """
+
     key = ECC.generate(curve='secp384r1')
     private_key, public_key = key, key.public_key()
     return (private_key, public_key)
@@ -25,6 +26,7 @@ def verify_transaction(public_transaction):
             response (tuple): boolean and string saying if the transaction is
             valid or not
     """
+
     public_key = public_transaction['sender_public_key']
 
     public_transaction_without_signature_and_hash = {
@@ -71,6 +73,7 @@ class Blockchain():
             adds transaction to the current data
 
     """
+
     def __init__(self):
         self.chain = []
         self.current_data = []
@@ -223,10 +226,12 @@ class Transaction():
             public key address corresponding to the destination of the transaction
 
         sender_private_key: EccKey
-            private key corresponding  to the sender (this key will sign the transaction)
+            private key corresponding  to the sender (this key will sign the
+            transaction)
 
     """
-    def __init__(self, sender_public_key, recipient_public_key, sender_private_key, value):
+    def __init__(self, sender_public_key, recipient_public_key,
+                 sender_private_key, value):
         self.sender_public_key = sender_public_key
         self.recipient_public_key = recipient_public_key
         self.sender_private_key = sender_private_key
